@@ -63,6 +63,7 @@
 	}
 
 	.setup {
+		cursor: pointer;
 		position: absolute;
 		right: 10px;
 		top: 10px;

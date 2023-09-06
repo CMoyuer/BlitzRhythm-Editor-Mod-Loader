@@ -76,7 +76,6 @@
 	}
 
 	function selectMod(item) {
-		console.log(item)
 		router.push({
 			name: "plugin_settings",
 			params: {

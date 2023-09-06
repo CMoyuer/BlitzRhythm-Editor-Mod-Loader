@@ -7,6 +7,7 @@
 // @license     MIT
 // @grant       unsafeWindow
 // @grant       GM_xmlhttpRequest
+// @connect     githubusercontent.com
 // @match       https://cipher-editor-cn.picovr.com/*
 // @match       https://cipher-editor-va.picovr.com/*
 // @icon        https://cipher-editor-va.picovr.com/favicon.ico
@@ -14,6 +15,7 @@
 // ==/UserScript==
 
 const htmlSrc = "http://127.0.0.1"
+// const htmlSrc = "https://raw.githubusercontent.com/CMoyuer/BlitzRhythm-Editor-Mod-Loader/main/ModLoaderDrawer/dist/index.html"
 
 /** @type {HTMLElement} */
 let modloaderBox
@@ -36,7 +38,7 @@ function initModloaderBox() {
     modloaderBox.id = "modloaderIframe"
     iframe.style = "box-shadow: 0 0 10px 0 black;border:none;width:360px;height:100vh;position:fixed;right:0;top:0;bottom:0;transform:translateX(100%);z-index:9999;transition: transform 0.3s ease-in-out;pointer-events: auto;"
     GM_xmlhttpRequest({
-        url: htmlSrc,
+        url: htmlSrc + "?t=" + new Date().getTime(),
         method: "GET",
         onload: res => {
             iframe.srcdoc = res.response

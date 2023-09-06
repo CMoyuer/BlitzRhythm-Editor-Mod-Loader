@@ -128,7 +128,7 @@
 		}
 		modHandle.value = mod
 		iconSrc.value = utils.getModInfo(mod, "icon") || iconSrc.value
-		console.log(mod)
+		// console.log("mod info", mod)
 		let info = {}
 		for (let i in infoKeys.value) {
 			let key = infoKeys.value[i]
