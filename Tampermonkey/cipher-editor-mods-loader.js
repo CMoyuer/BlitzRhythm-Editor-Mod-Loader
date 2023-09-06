@@ -43,6 +43,7 @@ function initModloaderBox() {
     iframe = document.createElement("iframe")
     modloaderBox.id = "modloaderIframe"
     iframe.style = "box-shadow: 0 0 10px 0 black;border:none;width:360px;height:100vh;position:fixed;right:0;top:0;bottom:0;transform:translateX(100%);z-index:9999;transition: transform 0.3s ease-in-out;pointer-events: auto;"
+    console.log("ModLoader loading...")
     GM_xmlhttpRequest({
         url: htmlSrc + "?t=" + new Date().getTime(),
         method: "GET",
@@ -51,6 +52,7 @@ function initModloaderBox() {
         },
         onerror: res => {
             console.error(res)
+            alert("ModLoader load failed!")
         }
     })
     modloaderBox.append(iframe)
