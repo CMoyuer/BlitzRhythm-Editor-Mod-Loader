@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name        Extra Song Search
-// @name:cn     闪韵灵境歌曲搜索扩展
+// @name:zh     闪韵灵境歌曲搜索扩展
 // @namespace   cipher-editor-mod-extra-song-search
 // @version     1.0
-// @description 通过BeatSaver方便添加歌曲
-// @description:cn 通过BeatSaver方便添加歌曲
-// @author      如梦Nya
+// @description     Search for more songs from other websites
+// @description:zh  通过其他网站搜索更多的歌曲
+// @author      Moyuer
+// @author:zh   如梦Nya
+// @source      https://github.com/CMoyuer/BlitzRhythm-Editor-Mod-Loader
 // @license     MIT
 // @run-at      document-body
 // @grant       unsafeWindow
@@ -18,6 +20,7 @@
 // @require     https://greasyfork.org/scripts/473358-jszip/code/main.js?version=1237031
 // @require     https://greasyfork.org/scripts/473361-xml-http-request-interceptor/code/main.js?version=1237032
 // @require     https://greasyfork.org/scripts/473362-web-indexeddb-helper/code/main.js?version=1237033
+// @require     https://greasyfork.org/scripts/474680-blitzrhythm-editor-mod-base-lib/code/main.js?version=1246368
 // ==/UserScript==
 
 const I18N = {
@@ -35,11 +38,22 @@ const I18N = {
         methods: {
             test: {
                 name: "Test",
-                description: "Just A Test",
+                description: "Just Test",
+            }
+        },
+        code: {
+            search: {
+                fail: "Search song failed!"
+            },
+            convert: {
+                title: "Convert To Custom Beatmap",
+                description: "Convert official beatmaps to custom beatmaps to export beatmap with ogg file.",
+                btn_name: "Start Convert",
+                tip_failed: "Conversion failed, please refresh and try again!"
             }
         }
     },
-    cn: { // Chinese
+    zh: { // Chinese
         parameter: {
             search_page_sum: {
                 name: "搜索页面数量",
@@ -54,6 +68,17 @@ const I18N = {
             test: {
                 name: "测试",
                 description: "只是一个测试按钮",
+            }
+        },
+        code: {
+            search: {
+                fail: "搜索歌曲失败！"
+            },
+            convert: {
+                title: "转换为自定义谱面",
+                description: "将官方谱面转换为自定义谱面, 以导出带有Ogg文件的完整谱面压缩包。",
+                btn_name: "开始转换谱面",
+                tip_failed: "转换谱面失败，请刷新再试！"
             }
         }
     }
@@ -81,20 +106,20 @@ const PARAMETER = [
 ]
 
 const METHODS = [
-    {
-        name: $t("methods.test.name"),
-        description: $t("methods.test.description"),
-        func: () => {
-            log($t("methods.test.name"))
-        }
-    }, {
-        name: $t("methods.test.name"),
-        description: $t("methods.test.description"),
-        func: () => {
-            log($t("methods.test.name"))
-            hideDrawer()
-        }
-    },
+    // {
+    //     name: $t("methods.test.name") + "1",
+    //     description: $t("methods.test.description"),
+    //     func: () => {
+    //         log($t("methods.test.name"))
+    //     }
+    // }, {
+    //     name: $t("methods.test.name") + "2",
+    //     description: $t("methods.test.description"),
+    //     func: () => {
+    //         log($t("methods.test.name"))
+    //         hideDrawer()
+    //     }
+    // },
 ]
 
 let pluginEnabled = false
@@ -156,43 +181,6 @@ class CipherUtils {
     }
 
     /**
-     * 获取谱面全部信息
-     * @param {string} id 谱面ID
-     * @returns {object}
-     */
-    static async getCipherMapFullInfo(id) {
-        let BLITZ_RHYTHM = await WebDB.open("BLITZ_RHYTHM")
-        let rawSongs = await BLITZ_RHYTHM.get("keyvaluepairs", "persist:songs")
-        BLITZ_RHYTHM.close()
-        let songsInfo = JSON.parse(rawSongs)
-        let songsById = JSON.parse(songsInfo.byId)
-        return songsById[id]
-    }
-
-    /**
-     * 获取指定谱面的歌曲OGG资源
-     * @param {string} id 谱面ID
-     * @returns {Promise<Blob, any>}
-     */
-    static async getSongBlob(id) {
-        let info = await CipherUtils.getCipherMapFullInfo(id)
-        let songFileName = info.songFilename + ""
-        let blob
-        if (info.officialId) {
-            // 官谱
-            let BLITZ_RHYTHM_official = await WebDB.open("BLITZ_RHYTHM-official")
-            blob = await BLITZ_RHYTHM_official.get("keyvaluepairs", songFileName)
-            BLITZ_RHYTHM_official.close()
-        } else {
-            // 自定义谱
-            let BLITZ_RHYTHM_files = await WebDB.open("BLITZ_RHYTHM-files")
-            blob = await BLITZ_RHYTHM_files.get("keyvaluepairs", songFileName)
-            BLITZ_RHYTHM_files.close()
-        }
-        return blob
-    }
-
-    /**
      * 添加歌曲校验数据头
      * @param {ArrayBuffer} rawBuffer 
      * @returns {Blob}
@@ -225,29 +213,6 @@ class CipherUtils {
         } else {
             return matchs[1]
         }
-    }
-
-    /**
-     * 获取页面参数
-     * @returns 
-     */
-    static getPageParmater() {
-        let url = window.location.href
-        let matchs = url.match(/\?import=(\w{1,})@(\w{1,})@(\w{1,})/)
-        if (!matchs) return
-        return {
-            event: "import",
-            source: matchs[1],
-            id: matchs[2],
-            mode: matchs[3],
-        }
-    }
-
-    /**
-     * 关闭编辑器顶部菜单
-     */
-    static closeEditorTopMenu() {
-        $(".css-1k12r02").click()
     }
 
     /**
@@ -387,72 +352,6 @@ class BeatSaverUtils {
             return await eggFile.async("blob")
         }
     }
-
-    /**
-     * 获取压缩包下载链接
-     * @param {string} id 歌曲ID
-     * @return {Promise}
-     */
-    static getDownloadUrl(id) {
-        return new Promise(function (resolve, reject) {
-            Utils.ajax({
-                url: "https://api.beatsaver.com/maps/id/" + id,
-                method: "GET",
-                responseType: "json",
-            }).then(data => {
-                resolve(data.versions[0].downloadURL)
-            }).catch(err => {
-                reject(err)
-            })
-        })
-    }
-
-    /**
-     * 从压缩包中提取曲谱难度文件
-     * @param {Blob} zipBlob
-     * @returns 
-     */
-    static async getBeatmapInfo(zipBlob) {
-        let zip = await JSZip.loadAsync(zipBlob)
-        // 谱面信息
-        let infoFile
-        for (let fileName in zip.files) {
-            if (fileName.toLowerCase() !== "info.dat") continue
-            infoFile = zip.files[fileName]
-            break
-        }
-        if (!infoFile) throw "请检查压缩包中是否包含info.dat文件"
-        let rawBeatmapInfo = JSON.parse(await infoFile.async("string"))
-        // 难度列表
-        let difficultyBeatmaps
-        let diffBeatmapSets = rawBeatmapInfo._difficultyBeatmapSets
-        for (let a in diffBeatmapSets) {
-            let info = diffBeatmapSets[a]
-            if (info["_beatmapCharacteristicName"] !== "Standard") continue
-            difficultyBeatmaps = info._difficultyBeatmaps
-            break
-        }
-        // 难度对应文件名
-        let beatmapInfo = {
-            raw: rawBeatmapInfo,
-            version: rawBeatmapInfo._version,
-            levelAuthorName: rawBeatmapInfo._levelAuthorName,
-            difficulties: []
-        }
-        for (let index in difficultyBeatmaps) {
-            let difficultyInfo = difficultyBeatmaps[index]
-            let difficulty = difficultyInfo._difficulty
-            let difficultyLabel = ""
-            if (difficultyInfo._customData && difficultyInfo._customData._difficultyLabel)
-                difficultyLabel = difficultyInfo._customData._difficultyLabel
-            beatmapInfo.difficulties.push({
-                difficulty,
-                difficultyLabel,
-                file: zip.files[difficultyInfo._beatmapFilename]
-            })
-        }
-        return beatmapInfo
-    }
 }
 
 /**
@@ -479,32 +378,6 @@ class Utils {
     }
 
     /**
-     * 获取音乐文件时长
-     * @param {Blob} blob 
-     */
-    static getOggDuration(blob) {
-        return new Promise((resolve, reject) => {
-            let reader = new FileReader()
-            reader.onerror = () => {
-                reject(reader.error)
-            }
-            reader.onload = (e) => {
-                let audio = document.createElement('audio')
-                audio.addEventListener("loadedmetadata", () => {
-                    resolve(audio.duration)
-                    $(audio).remove()
-                })
-                audio.addEventListener('error', () => {
-                    reject(audio.error)
-                    $(audio).remove()
-                })
-                audio.src = e.target.result
-            }
-            reader.readAsDataURL(new File([blob], "song.ogg", { type: "audio/ogg" }))
-        })
-    }
-
-    /**
      * 异步发起网络请求
      * @param {object} config 
      * @returns 
@@ -527,42 +400,6 @@ class Utils {
                 reject(err)
             }
             GM_xmlhttpRequest(config)
-        })
-    }
-
-    /**
-     * 将Blob转换为Base64
-     * @param {Blob} blob
-     * @returns {Promise}
-     */
-    static blobToBase64(blob) {
-        return new Promise(function (resolve, reject) {
-            const fileReader = new FileReader();
-            fileReader.onload = (e) => {
-                resolve(e.target.result)
-            }
-            fileReader.readAsDataURL(blob)
-        })
-    }
-
-    /**
-     * 将Base64格式转换为File
-     * @param {string} base64 
-     * @param {string} filename 
-     * @returns 
-     */
-    static base64toFile(base64, filename = 'file') {
-        let arr = base64.split(',')
-        let mime = arr[0].match(/:(.*?);/)[1]
-        let suffix = mime.split('/')[1]
-        let bstr = atob(arr[1])
-        let n = bstr.length
-        let u8arr = new Uint8Array(n)
-        while (n--) {
-            u8arr[n] = bstr.charCodeAt(n)
-        }
-        return new File([u8arr], `${filename}.${suffix}`, {
-            type: mime,
         })
     }
 }
@@ -597,7 +434,7 @@ function initXHRIntercept() {
                 songInfoMap = res.songInfoMap
                 complete()
             }).catch(err => {
-                alert("搜索歌曲失败！")
+                alert($t("code.search.fail"))
                 console.error(err)
                 self.extraSongList = []
                 complete()
@@ -813,16 +650,16 @@ async function applyConvertCiphermapButton() {
         if ($("#div-custom").length > 0) return
         let divBox = $(divList[0]).clone()
         divBox[0].id = "div-custom"
-        divBox.find(".css-ujbghi")[0].innerHTML = "转换为自定义谱面"
-        divBox.find(".css-1exyu3y")[0].innerHTML = "将官方谱面转换为自定义谱面, 以导出带有音乐文件的完整谱面压缩包。"
-        divBox.find(".css-1y7rp4x")[0].innerText = "开始转换谱面"
+        divBox.find(".css-ujbghi")[0].innerHTML = $t("code.convert.title")
+        divBox.find(".css-1exyu3y")[0].innerHTML = $t("code.convert.description")
+        divBox.find(".css-1y7rp4x")[0].innerText = $t("code.convert.btn_name")
         divBox[0].onclick = e => {
             // 更新歌曲信息
             this.updateDatabase(true).then((hasChanged) => {
                 if (hasChanged) setTimeout(() => { window.location.reload() }, 1000)
             }).catch(err => {
-                console.log("转换谱面失败：", err)
-                alert("转换谱面失败，请刷新再试！")
+                console.log("Convert map failed:", err)
+                alert($t("code.convert.btn_name"))
             })
         }
         $(divList[0].parentNode).append(divBox)
@@ -849,8 +686,8 @@ function tick() {
             updateDatabase().then((hasChanged) => {
                 if (hasChanged) setTimeout(() => { window.location.reload() }, 1000)
             }).catch(err => {
-                console.log("更新数据失败：", err)
-                alert("更新歌曲信息失败，请刷新再试！")
+                console.log("Update map info failed:", err)
+                alert($t("tip_failed"))
             })
         } else if (pageType === "download") {
             applyConvertCiphermapButton()

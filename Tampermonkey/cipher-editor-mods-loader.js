@@ -1,9 +1,12 @@
 // ==UserScript==
-// @name        《闪韵灵境谱面编辑器》模组加载器
+// @name        BlitzRhythm Editor Mod Loader
+// @name:zh     闪韵灵境谱面编辑器 模组加载器
 // @namespace   cipher-editor-mods-loader
 // @version     1.0.0
-// @description 为《闪韵灵境谱面编辑器》扩展各种实用的功能
-// @author      如梦Nya
+// @description     A BlitzRhythm Editor Mod Loader
+// @description:zh  一款《闪韵灵境》谱面编辑器的Mod加载器
+// @author      Moyuer
+// @author:zh   如梦Nya
 // @license     MIT
 // @grant       unsafeWindow
 // @grant       GM_xmlhttpRequest
@@ -14,8 +17,11 @@
 // @require     https://code.jquery.com/jquery-3.6.0.min.js
 // ==/UserScript==
 
-const htmlSrc = "http://127.0.0.1"
-// const htmlSrc = "https://raw.githubusercontent.com/CMoyuer/BlitzRhythm-Editor-Mod-Loader/main/ModLoaderDrawer/dist/index.html"
+let htmlSrc = "https://raw.githubusercontent.com/CMoyuer/BlitzRhythm-Editor-Mod-Loader/main/ModLoaderDrawer/dist/index.html"
+
+if (GM_info.script.namespace.endsWith("-dev"))
+    htmlSrc = "http://127.0.0.1"
+
 
 /** @type {HTMLElement} */
 let modloaderBox

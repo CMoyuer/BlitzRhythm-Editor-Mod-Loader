@@ -1,12 +1,15 @@
 // ==UserScript==
-// @name        闪韵灵境谱面导入扩展
+// @name        BlitzRhythm Editor Mod Base Lib
 // @namespace   lib-cipher-mod-base
 // @version     1.0.0
-// @description 兼容其他格式的谱面数据导入
-// @author      如梦Nya
+// @description A BlitzRhythm Editor Mod Base Lib
+// @author      Moyuer
+// @author:zh   如梦Nya
 // @license     MIT
+// @source      https://github.com/CMoyuer/BlitzRhythm-Editor-Mod-Loader
 // @match       *://*/*
 // ==/UserScript==
+
 const scriptInfo = window.GM_info.script
 // const icon = window.GM_info.script.icon
 // const scriptName = window.GM_info.script.name
@@ -21,10 +24,11 @@ function log(...data) {
  * @param {string} key 
  */
 function $t(key) {
-    let language = localStorage.getItem("language") ?? "en"
+    let language = localStorage.getItem("i18nextLng") ?? "en"
+    if (/^zh-?/.test(language) && I18N["zh"]) language = "zh"
     let keys = key.split('.')
     try {
-        let val = I18N[language]
+        let val = I18N[language] ?? I18N['en']
         keys.forEach(element => {
             val = val[element]
         })

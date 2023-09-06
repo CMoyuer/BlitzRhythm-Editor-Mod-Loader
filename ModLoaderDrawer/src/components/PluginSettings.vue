@@ -128,7 +128,7 @@
 		}
 		modHandle.value = mod
 		iconSrc.value = utils.getModInfo(mod, "icon") || iconSrc.value
-		// console.log("mod info", mod)
+		console.log("Mod info", mod)
 		let info = {}
 		for (let i in infoKeys.value) {
 			let key = infoKeys.value[i]
@@ -257,10 +257,17 @@
 	.description .info .name {
 		flex: 1;
 		padding-right: 15px;
+		min-width: 90px;
 	}
 
 	.description .info .name .el-text {
 		color: black !important;
+	}
+
+	.description .value {
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
 	}
 
 	.description a {
