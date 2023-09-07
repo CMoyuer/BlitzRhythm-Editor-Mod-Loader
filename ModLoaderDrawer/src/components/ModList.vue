@@ -7,7 +7,7 @@
 			<div v-if="modList.length == 0">
 				<el-empty :description="$t('modlist.noMod')" />
 				<div class="add_more_mod">
-					<a href="https://greasyfork.org/en/users/1035177">{{$t("modlist.addMoreMod")}}</a>
+					<a href="https://greasyfork.org/en/users/1035177" target="_blank">{{$t("modlist.addMoreMod")}}</a>
 				</div>
 			</div>
 			<el-scrollbar v-else :native="true">
