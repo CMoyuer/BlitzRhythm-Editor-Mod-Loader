@@ -3,7 +3,7 @@
 // @name:en     Extra Song Search
 // @name:zh     闪韵灵境歌曲搜索扩展
 // @namespace   cipher-editor-mod-extra-song-search
-// @version     1.0.2
+// @version     1.0.3
 // @description     Search for more songs from other websites
 // @description:zh  通过其他网站搜索更多的歌曲
 // @author      Moyuer
@@ -21,7 +21,7 @@
 // @require     https://greasyfork.org/scripts/473358-jszip/code/main.js?version=1237031
 // @require     https://greasyfork.org/scripts/473361-xml-http-request-interceptor/code/main.js?version=1237032
 // @require     https://greasyfork.org/scripts/473362-web-indexeddb-helper/code/main.js?version=1237033
-// @require     https://greasyfork.org/scripts/474680-blitzrhythm-editor-mod-base-lib/code/main.js?version=1246368
+// @require     https://greasyfork.org/scripts/474680-blitzrhythm-editor-mod-base-lib/code/main.js?version=1246657
 // ==/UserScript==
 
 const I18N = {
