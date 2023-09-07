@@ -2,7 +2,7 @@
 // @name        BlitzRhythm Editor Mod Loader
 // @name:zh     闪韵灵境谱面编辑器 模组加载器
 // @namespace   cipher-editor-mods-loader
-// @version     1.1.2
+// @version     1.1.3
 // @description     A BlitzRhythm Editor Mod Loader
 // @description:zh  一款《闪韵灵境》谱面编辑器的Mod加载器
 // @author      Moyuer
@@ -45,18 +45,28 @@ function initModloaderBox() {
     iframe = document.createElement("iframe")
     modloaderBox.id = "modloaderIframe"
     iframe.style = "box-shadow: 0 0 10px 0 black;border:none;width:360px;height:100vh;position:fixed;right:0;top:0;bottom:0;transform:translateX(100%);z-index:9999;transition: transform 0.3s ease-in-out;pointer-events: auto;"
-    console.log("ModLoader loading...")
-    GM_xmlhttpRequest({
-        url: htmlSrc + "?t=" + new Date().getTime(),
-        method: "GET",
-        onload: res => {
-            iframe.srcdoc = res.response
-        },
-        onerror: res => {
-            console.error(res)
-            alert("ModLoader load failed!")
-        }
-    })
+    let loadHtml = () => {
+        let url = htmlSrc + "?t=" + new Date().getTime()
+        console.log("ModLoader loading html from:", url)
+        GM_xmlhttpRequest({
+            url,
+            method: "GET",
+            timeout: 10 * 1000,
+            onload: res => {
+                iframe.srcdoc = res.response
+                console.log("ModLoader load html success!")
+            },
+            onerror: res => {
+                console.error("ModLoader load html failed:", res)
+                setTimeout(loadHtml, 1000)
+            },
+            ontimeout: res => {
+                console.error("ModLoader load html timeout")
+                loadHtml()
+            }
+        })
+    }
+    loadHtml()
     modloaderBox.append(iframe)
     document.body.append(modloaderBox)
 }
