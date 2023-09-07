@@ -6,7 +6,9 @@ const message = {
 		title: "闪韵灵境编辑器Mod加载器",
 	},
 	modlist: {
-		loaded: "已加载{count}个Mod"
+		loaded: "已加载{count}个Mod",
+		noMod: "还未安装任何Mod",
+		addMoreMod: "添加更多Mod",
 	},
 	settings: {
 		title: "设置",
@@ -29,7 +31,7 @@ const message = {
 		base: "基本",
 		function: "功能",
 		parameter: "参数",
-		tipDisabled:"这个mod已被禁用，请启用后再试",
+		tipDisabled: "这个mod已被禁用，请启用后再试",
 	}
 }
 

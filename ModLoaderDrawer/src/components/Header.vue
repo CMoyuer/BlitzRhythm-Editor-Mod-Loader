@@ -52,20 +52,21 @@
 
 <style scoped>
 	.title {
+		font-size: 1.1rem;
 		text-align: center;
-		padding: 10px;
+		padding: 12px;
 	}
 
 	.back {
 		position: absolute;
-		left: 10px;
-		top: 10px;
+		left: 14px;
+		top: 14px;
 	}
 
 	.setup {
 		cursor: pointer;
 		position: absolute;
-		right: 10px;
-		top: 10px;
+		right: 14px;
+		top: 14px;
 	}
 </style>

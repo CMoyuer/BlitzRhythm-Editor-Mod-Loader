@@ -1,7 +1,21 @@
+/** @type {import("vue").App<Element>} */
+let appInstance
+
 let modMap = {}
 
-/** @type {function[]} */
-let onModAddedCallback = []
+// ====================================================================
+// Init
+
+export function init(app) {
+	appInstance = app
+	window.parent.modloader = {
+		addMod,
+		gotoPage
+	}
+}
+
+// ====================================================================
+// Private
 
 function log(...arg) {
 	let msg = "[ModLoader]"
@@ -14,6 +28,9 @@ function log(...arg) {
 	})
 	console.log(msg)
 }
+
+// ====================================================================
+// public
 
 export function addMod(res) {
 	if (modMap.hasOwnProperty(res.id))
@@ -73,8 +90,18 @@ export function changedParameter(pluginId, parameterId, value) {
 	modMap[pluginId]._methods.parameterChanged(parameterId, value)
 }
 
+export function gotoPage(path) {
+	appInstance.config.globalProperties.$router.push({
+		path
+	})
+	window.parent.modloader.drawer.methods.show()
+}
+
 // ====================================================================
 // ModAdded Callback
+
+/** @type {function[]} */
+let onModAddedCallback = []
 
 export function onModAdded(callback) {
 	if (onModAddedCallback.indexOf(callback) >= 0) return
@@ -95,11 +122,4 @@ function callModAddedCallback(res) {
 	onModAddedCallback.forEach(callback => {
 		callback(res)
 	})
-}
-
-// ====================================================================
-// Open
-
-export let exportFunc = {
-	addMod
 }

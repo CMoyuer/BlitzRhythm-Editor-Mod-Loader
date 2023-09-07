@@ -52,9 +52,8 @@ function $p(parameterId) {
     }
 }
 
-function showPluginSetupPage() {
-    unsafeWindow.modloader.drawer.methods.show()
-    // TODO
+function showSetupPage() {
+    unsafeWindow.modloader.gotoPage("/settings/" + scriptNamespace)
 }
 
 function hideDrawer() {

@@ -14,13 +14,13 @@ import VueAxios from "vue-axios";
 
 const app = createApp(App)
 
-app.config.globalProperties.$modloader = modLoader
+app.config.globalProperties.$router = router
 app.config.globalProperties.$t = i18n.global.t
+app.config.globalProperties.$modloader = modLoader
 
 app.use(ElementPlus)
 app.use(router)
 app.use(i18n)
 app.use(VueAxios, axios)
+app.use(modLoader.init)
 app.mount('#app')
-
-window.parent.modloader = modLoader.exportFunc

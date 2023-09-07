@@ -43,7 +43,8 @@ const I18N = {
         },
         code: {
             search: {
-                fail: "Search song failed!"
+                fail: "Search song failed!",
+                tip_timeout: "It seems that the search has timed out. Do you need to modify the timeout parameter?"
             },
             convert: {
                 title: "Convert To Custom Beatmap",
@@ -72,7 +73,8 @@ const I18N = {
         },
         code: {
             search: {
-                fail: "搜索歌曲失败！"
+                fail: "搜索歌曲失败！",
+                tip_timeout: "看来搜索超时了, 是否需要修改超时时间?"
             },
             convert: {
                 title: "转换为自定义谱面",
@@ -281,6 +283,17 @@ class BeatSaverUtils {
             let songInfoMap = {}
             let count = 0
             let cbFlag = false
+            let timeoutCount = 0
+
+            let funDone = () => {
+                if (++count != pageCount) return
+                cbFlag = true
+                resolve({ songList, songInfoMap })
+                if (timeoutCount > 0) {
+                    let flag = confirm($t("code.search.tip_timeout"))
+                    if (flag) showSetupPage()
+                }
+            }
             let funSuccess = data => {
                 // 填充数据
                 data.docs.forEach(rawInfo => {
@@ -295,17 +308,11 @@ class BeatSaverUtils {
                     let previewURL = rawInfo.versions[0].previewURL
                     songInfoMap[id] = { downloadURL, previewURL }
                 })
-                if (++count == pageCount) {
-                    cbFlag = true
-                    resolve({ songList, songInfoMap })
-                }
+                funDone()
             }
             let funFail = res => {
-                console.error(res)
-                if (++count == pageCount) {
-                    cbFlag = true
-                    resolve({ songList, songInfoMap })
-                }
+                if (res[0] === "timeout") timeoutCount++
+                funDone()
             }
             for (let i = 0; i < pageCount; i++) {
                 Utils.ajax({
@@ -396,8 +403,11 @@ class Utils {
                     reject("HTTP Code: " + res.status)
                 }
             }
-            config.ontimeout = config.onerror = err => {
-                reject(err)
+            config.onerror = (...data) => {
+                reject(["error", ...data])
+            }
+            config.ontimeout = (...data) => {
+                reject(["timeout", ...data])
             }
             GM_xmlhttpRequest(config)
         })

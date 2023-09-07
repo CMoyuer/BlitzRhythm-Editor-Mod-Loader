@@ -4,7 +4,12 @@
 			<Header />
 		</el-header>
 		<el-main>
-			<el-empty v-if="modList.length == 0" description="No mods added yet" />
+			<div v-if="modList.length == 0">
+				<el-empty :description="$t('modlist.noMod')" />
+				<div class="add_more_mod">
+					<a href="https://greasyfork.org/en/users/1035177">{{$t("modlist.addMoreMod")}}</a>
+				</div>
+			</div>
 			<el-scrollbar v-else :native="true">
 				<div v-for="item,index in modList" class="item">
 					<!-- <div class="index">{{index}}</div> -->
@@ -30,8 +35,9 @@
 				</div>
 				<div class="tip">
 					<el-text size="small">
-						{{$t('modlist.loaded',{count: modList.length})}}
+						{{$t('modlist.loaded',{count: modList.length})}}, 
 					</el-text>
+					<a class="add_more_mod" href="https://greasyfork.org/en/users/1035177" target="_blank">{{$t("modlist.addMoreMod")}}</a>
 				</div>
 			</el-scrollbar>
 		</el-main>
@@ -173,5 +179,10 @@
 
 	.tip .el-text {
 		color: gray;
+	}
+
+	.add_more_mod {
+		font-size: .5rem;
+		text-align: center;
 	}
 </style>

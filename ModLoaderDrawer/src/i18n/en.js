@@ -6,7 +6,9 @@ const message = {
 		title: "BlitzRhythm Editor Mod Loader",
 	},
 	modlist: {
-		loaded: "{count} mods loaded"
+		loaded: "{count} mods loaded",
+		noMod: "No mods added yet",
+		addMoreMod: "Add more mods",
 	},
 	settings: {
 		title: "Settings",
