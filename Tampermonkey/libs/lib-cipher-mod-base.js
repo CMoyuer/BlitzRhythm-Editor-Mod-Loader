@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BlitzRhythm Editor Mod Base Lib
 // @namespace   lib-cipher-mod-base
-// @version     1.0.0
+// @version     1.1.0
 // @description A BlitzRhythm Editor Mod Base Lib
 // @author      Moyuer
 // @author:zh   如梦Nya

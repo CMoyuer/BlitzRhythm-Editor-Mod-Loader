@@ -2,7 +2,7 @@
 // @name        BlitzRhythm Editor Mod Loader
 // @name:zh     闪韵灵境谱面编辑器 模组加载器
 // @namespace   cipher-editor-mods-loader
-// @version     1.0.3
+// @version     1.1.0
 // @description     A BlitzRhythm Editor Mod Loader
 // @description:zh  一款《闪韵灵境》谱面编辑器的Mod加载器
 // @author      Moyuer

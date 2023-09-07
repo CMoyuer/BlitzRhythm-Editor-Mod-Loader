@@ -2,7 +2,7 @@
 // @name        Extra Song Search
 // @name:zh     闪韵灵境歌曲搜索扩展
 // @namespace   cipher-editor-mod-extra-song-search
-// @version     1.0
+// @version     1.0.1
 // @description     Search for more songs from other websites
 // @description:zh  通过其他网站搜索更多的歌曲
 // @author      Moyuer
