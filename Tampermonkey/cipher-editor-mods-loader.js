@@ -2,7 +2,7 @@
 // @name        BlitzRhythm Editor Mod Loader
 // @name:zh     闪韵灵境谱面编辑器 模组加载器
 // @namespace   cipher-editor-mods-loader
-// @version     1.1.0
+// @version     1.1.1
 // @description     A BlitzRhythm Editor Mod Loader
 // @description:zh  一款《闪韵灵境》谱面编辑器的Mod加载器
 // @author      Moyuer
@@ -15,12 +15,6 @@
 // @match       https://cipher-editor-cn.picovr.com/*
 // @match       https://cipher-editor-va.picovr.com/*
 // @icon        https://cipher-editor-va.picovr.com/favicon.ico
-// @require     https://code.jquery.com/jquery-3.6.0.min.js
-// @require     https://greasyfork.org/scripts/473358-jszip/code/main.js?version=1237031
-// @require     https://greasyfork.org/scripts/473361-xml-http-request-interceptor/code/main.js?version=1237032
-// @require     https://greasyfork.org/scripts/473362-web-indexeddb-helper/code/main.js?version=1237033
-// @require     https://greasyfork.org/scripts/474680-blitzrhythm-editor-mod-base-lib/code/main.js?version=1246368
-// @require     https://greasyfork.org/scripts/474682-extra-song-search/code/main.js?version=1246392
 // ==/UserScript==
 
 let htmlSrc = "https://raw.githubusercontent.com/CMoyuer/BlitzRhythm-Editor-Mod-Loader/main/ModLoaderDrawer/dist/index.html"
