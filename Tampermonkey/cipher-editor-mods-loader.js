@@ -2,7 +2,7 @@
 // @name        BlitzRhythm Editor Mod Loader
 // @name:zh     闪韵灵境谱面编辑器 模组加载器
 // @namespace   cipher-editor-mods-loader
-// @version     1.1.1
+// @version     1.1.2
 // @description     A BlitzRhythm Editor Mod Loader
 // @description:zh  一款《闪韵灵境》谱面编辑器的Mod加载器
 // @author      Moyuer
@@ -11,6 +11,7 @@
 // @grant       unsafeWindow
 // @grant       GM_xmlhttpRequest
 // @connect     beatsaver.com
+// @connect     gitmirror.com
 // @connect     githubusercontent.com
 // @match       https://cipher-editor-cn.picovr.com/*
 // @match       https://cipher-editor-va.picovr.com/*
@@ -19,9 +20,10 @@
 
 let htmlSrc = "https://raw.githubusercontent.com/CMoyuer/BlitzRhythm-Editor-Mod-Loader/main/ModLoaderDrawer/dist/index.html"
 
+if (getLanguage() === "zh")
+    htmlSrc = "https://raw.gitmirror.com/CMoyuer/BlitzRhythm-Editor-Mod-Loader/main/ModLoaderDrawer/dist/index.html"
 if (GM_info.script.namespace.endsWith("-dev"))
     htmlSrc = "http://127.0.0.1"
-
 
 /** @type {HTMLElement} */
 let modloaderBox
@@ -141,6 +143,12 @@ function initShowButton() {
     }
 
     document.body.appendChild(btnShow)
+}
+
+function getLanguage() {
+    let language = localStorage.getItem("i18nextLng") ?? "en"
+    if (/^zh-?/.test(language)) language = "zh"
+    return language
 }
 
 (function () {
