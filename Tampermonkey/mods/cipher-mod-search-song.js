@@ -3,7 +3,7 @@
 // @name:en     Extra Song Search
 // @name:zh     闪韵灵境歌曲搜索扩展
 // @namespace   cipher-editor-mod-extra-song-search
-// @version     1.0.3
+// @version     1.1.0
 // @description     Search for more songs from other websites
 // @description:zh  通过其他网站搜索更多的歌曲
 // @author      Moyuer
@@ -37,10 +37,10 @@ const I18N = {
             }
         },
         methods: {
-            test: {
-                name: "Test",
-                description: "Just Test",
-            }
+            // test: {
+            //     name: "Test",
+            //     description: "Just a test button",
+            // },
         },
         code: {
             search: {
@@ -67,10 +67,10 @@ const I18N = {
             }
         },
         methods: {
-            test: {
-                name: "测试",
-                description: "只是一个测试按钮",
-            }
+            // test: {
+            //     name: "测试",
+            //     description: "只是一个测试按钮",
+            // },
         },
         code: {
             search: {
@@ -110,19 +110,12 @@ const PARAMETER = [
 
 const METHODS = [
     // {
-    //     name: $t("methods.test.name") + "1",
+    //     name: $t("methods.test.name"),
     //     description: $t("methods.test.description"),
     //     func: () => {
     //         log($t("methods.test.name"))
     //     }
-    // }, {
-    //     name: $t("methods.test.name") + "2",
-    //     description: $t("methods.test.description"),
-    //     func: () => {
-    //         log($t("methods.test.name"))
-    //         hideDrawer()
-    //     }
-    // },
+    // }, 
 ]
 
 let pluginEnabled = false
@@ -154,8 +147,10 @@ function onDisabled() {
 
 function onParameterValueChanged(id, val) {
     log("onParameterValueChanged", id, val)
-    log("debug", $p(id))
+    // log("debug", $p(id))
 }
+
+// =====================================================================================
 
 /**
  * 闪韵灵境工具类
@@ -286,6 +281,11 @@ class BeatSaverUtils {
             let cbFlag = false
             let timeoutCount = 0
 
+            let beatsaverMappingStr = localStorage.getItem("BeatSaverMapping")
+            let beatSaverMapping = beatsaverMappingStr ? JSON.parse(beatsaverMappingStr) : {
+                mapping: {}
+            }
+
             let funDone = () => {
                 if (++count != pageCount) return
                 cbFlag = true
@@ -302,12 +302,13 @@ class BeatSaverUtils {
                     let bpm = rawInfo.metadata.bpm
                     let cover = rawInfo.versions[0].coverURL
                     let song_name = "[" + rawInfo.id + "]" + rawInfo.metadata.songName
-                    let id = 80000000000 + parseInt(rawInfo.id, 36)
+                    let id = beatSaverMapping.mapping[rawInfo.id]
+                    if (typeof id !== "number")
+                        id = 80000000000 + parseInt(rawInfo.id, 36)
                     songList.push({ artist, bpm, cover, song_name, id })
-
                     let downloadURL = rawInfo.versions[0].downloadURL
                     let previewURL = rawInfo.versions[0].previewURL
-                    songInfoMap[id] = { downloadURL, previewURL }
+                    songInfoMap[id] = { rawInfo, downloadURL, previewURL }
                 })
                 funDone()
             }
@@ -480,6 +481,7 @@ function initXHRIntercept() {
             let id = parseInt(result[0])
             BeatSaverUtils.downloadSongFile(songInfoMap[id].downloadURL, _onprogress).then(oggBlob => {
                 songInfoMap[id].ogg = oggBlob
+                saveBeatSaverMapping(id, songInfoMap[id].rawInfo)
                 complete()
             }).catch(err => {
                 console.error(err)
@@ -518,6 +520,16 @@ function initXHRIntercept() {
     }
     xhrIntercept.onSend(onSend)
 }
+
+// Save BeatSaver Info
+function saveBeatSaverMapping(id, rawInfo) {
+    let beatsaverMappingStr = localStorage.getItem("BeatSaverMapping")
+    let beatSaverMapping = beatsaverMappingStr ? JSON.parse(beatsaverMappingStr) : {}
+    if (!beatSaverMapping.mapping) beatSaverMapping.mapping = {}
+    beatSaverMapping.mapping[rawInfo.id] = id
+    localStorage.setItem("BeatSaverMapping", JSON.stringify(beatSaverMapping))
+}
+
 /**
  * 更新数据库
  * @param {Boolean} isForce 强制转换
@@ -543,6 +555,21 @@ async function updateDatabase(isForce) {
             songInfo.coverArtFilename = songInfo.coverArtFilename.replace("" + songInfo.officialId, songInfo.id)
             songInfo.songFilename = songInfo.songFilename.replace("" + songInfo.officialId, songInfo.id)
             songInfo.officialId = ""
+
+            // Add Source Info
+            if (!songInfo.modSettings) songInfo.modSettings = {}
+            if (!songInfo.modSettings.source) songInfo.modSettings.source = {}
+            try {
+                let beatsaverMapping = JSON.parse(localStorage.getItem("BeatSaverMapping") || "{}")
+                let mapping = beatsaverMapping.mapping || {}
+                for (let bsId in mapping) {
+                    if (mapping[bsId] !== officialId) continue
+                    songInfo.modSettings.source.beatsaverId = bsId
+                    break
+                }
+            } catch (error) {
+                console.error("Add source info failed:", error)
+            }
             songsById[key] = songInfo
             hasChanged = true
         }
