@@ -5,6 +5,7 @@
 // @namespace   cipher-editor-mod-extra-beatmap-import
 // @version     1.0.0
 // @description     Import BeatSaber beatmap into the BlitzRhythm editor
+// @description:en  Import BeatSaber beatmap into the BlitzRhythm editor
 // @description:zh  将BeatSaber谱面导入到闪韵灵境编辑器内
 // @author      Moyuer
 // @author:zh   如梦Nya

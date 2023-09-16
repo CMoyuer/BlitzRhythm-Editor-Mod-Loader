@@ -5,6 +5,7 @@
 // @namespace   cipher-editor-mod-extra-song-search
 // @version     1.1.0
 // @description     Search for more songs from other websites
+// @description:en  Search for more songs from other websites
 // @description:zh  通过其他网站搜索更多的歌曲
 // @author      Moyuer
 // @author:zh   如梦Nya
