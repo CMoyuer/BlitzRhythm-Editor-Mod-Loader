@@ -9,7 +9,7 @@
  - [Blitz Rhythm Editor (CN)](https://cipher-editor-cn.picovr.com/)
  - [Blitz Rhythm Editor (VA)](https://cipher-editor-va.picovr.com/)
 
-## 安装方式
+## Install
 1. Install [Goole Chrome](https://www.google.com/chrome/) browser
 2. Install the [Tampermonkey](https://www.tampermonkey.net/) plug-in in the browser
 3. Click install [Mod Loader](https://greasyfork.org/en/scripts/474681)
