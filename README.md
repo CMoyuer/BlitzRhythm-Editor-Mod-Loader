@@ -16,5 +16,5 @@
 4. Install other compatible Mods for use. It is recommended to use the Mods provided below.
 
 ## Recommended Mods
- - [Song search expansion](https://greasyfork.org/en/scripts/474682)
- - [Beatmap import expansion](https://greasyfork.org/en/scripts/475096)
+ - [Extra Song Search](https://greasyfork.org/en/scripts/474682)
+ - [Extra Beatmap Import](https://greasyfork.org/en/scripts/475096)

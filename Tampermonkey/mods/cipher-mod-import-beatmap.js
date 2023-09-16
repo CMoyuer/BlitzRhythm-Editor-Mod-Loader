@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name        BlitzRhythm Editor Extra Beatmap Import
 // @name:en     Extra Beatmap Import
-// @name:zh     闪韵灵境谱面导入扩展
+// @name:zh-CN     闪韵灵境谱面导入扩展
 // @namespace   cipher-editor-mod-extra-beatmap-import
-// @version     1.0.0
+// @version     1.0.1
 // @description     Import BeatSaber beatmap into the BlitzRhythm editor
 // @description:en  Import BeatSaber beatmap into the BlitzRhythm editor
-// @description:zh  将BeatSaber谱面导入到闪韵灵境编辑器内
+// @description:zh-CN 将BeatSaber谱面导入到闪韵灵境编辑器内
 // @author      Moyuer
-// @author:zh   如梦Nya
+// @author:zh-CN   如梦Nya
 // @source      https://github.com/CMoyuer/BlitzRhythm-Editor-Mod-Loader
 // @license     MIT
 // @run-at      document-body
@@ -24,7 +24,6 @@
 // @require     https://greasyfork.org/scripts/473362-web-indexeddb-helper/code/main.js?version=1237033
 // @require     https://greasyfork.org/scripts/474680-blitzrhythm-editor-mod-base-lib/code/main.js?version=1246657
 // ==/UserScript==
-
 
 const I18N = {
     en: { // English

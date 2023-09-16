@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name        BlitzRhythm Editor Mod Loader
-// @name:zh     闪韵灵境谱面编辑器 模组加载器
+// @name:zh-CN  闪韵灵境谱面编辑器 模组加载器
 // @namespace   cipher-editor-mods-loader
-// @version     1.1.3
-// @description     A BlitzRhythm Editor Mod Loader
-// @description:zh  一款《闪韵灵境》谱面编辑器的Mod加载器
+// @version     1.1.4
+// @description A BlitzRhythm Editor Mod Loader
+// @description:zh-CN  一款《闪韵灵境》谱面编辑器的Mod加载器
 // @author      Moyuer
-// @author:zh   如梦Nya
+// @author:zh-CN 如梦Nya
 // @license     MIT
 // @grant       unsafeWindow
 // @grant       GM_xmlhttpRequest

@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name        BlitzRhythm Editor Extra Song Search
 // @name:en     Extra Song Search
-// @name:zh     闪韵灵境歌曲搜索扩展
+// @name:zh-CN     闪韵灵境歌曲搜索扩展
 // @namespace   cipher-editor-mod-extra-song-search
-// @version     1.1.0
+// @version     1.1.1
 // @description     Search for more songs from other websites
 // @description:en  Search for more songs from other websites
-// @description:zh  通过其他网站搜索更多的歌曲
+// @description:zh-CN  通过其他网站搜索更多的歌曲
 // @author      Moyuer
-// @author:zh   如梦Nya
+// @author:zh-CN   如梦Nya
 // @source      https://github.com/CMoyuer/BlitzRhythm-Editor-Mod-Loader
 // @license     MIT
 // @run-at      document-body

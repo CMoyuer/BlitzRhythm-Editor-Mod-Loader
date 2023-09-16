@@ -1,12 +1,14 @@
 import {
 	createI18n
 } from 'vue-i18n'
-import {getLocale} from "../utils/utils.js"
-import zh from './zh.js'
+import {
+	getLocale
+} from "../utils/utils.js"
+import zh_CN from './zh_CN.js'
 import en from './en.js'
 
 const messages = {
-	zh,
+	zh_CN,
 	en
 }
 
