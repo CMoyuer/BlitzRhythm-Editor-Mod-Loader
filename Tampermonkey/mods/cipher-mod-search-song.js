@@ -19,10 +19,10 @@
 // @match       https://cipher-editor-va.picovr.com/*
 // @icon        https://cipher-editor-va.picovr.com/favicon.ico
 // @require     https://code.jquery.com/jquery-3.6.0.min.js
-// @require     https://greasyfork.org/scripts/473358-jszip/code/main.js?version=1237031
-// @require     https://greasyfork.org/scripts/473361-xml-http-request-interceptor/code/main.js?version=1237032
-// @require     https://greasyfork.org/scripts/473362-web-indexeddb-helper/code/main.js?version=1237033
-// @require     https://greasyfork.org/scripts/474680-blitzrhythm-editor-mod-base-lib/code/main.js?version=1246657
+// @require     https://greasyfork.org/scripts/473358-jszip/code/main.js
+// @require     https://greasyfork.org/scripts/473361-xml-http-request-interceptor/code/main.js
+// @require     https://greasyfork.org/scripts/473362-web-indexeddb-helper/code/main.js
+// @require     https://greasyfork.org/scripts/474680-blitzrhythm-editor-mod-base-lib/code/main.js
 // ==/UserScript==
 
 const I18N = {
