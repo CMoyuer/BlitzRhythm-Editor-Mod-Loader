@@ -2,7 +2,7 @@
 // @name        BlitzRhythm Editor Mod Base Lib
 // @name:zh-CN  闪韵灵境编辑器模组基本库
 // @namespace   lib-cipher-mod-base
-// @version     1.2.1
+// @version     1.2.2
 // @description A BlitzRhythm Editor Mod Base Lib
 // @description:zh-CN 兼容模组加载器所必须的库
 // @author      Moyuer
@@ -37,7 +37,7 @@ function $t(key, ...data) {
             val = val[element]
         })
         for (let i = 0; i < data.length; i++)
-            val = val.replace(new RegExp("{" + i + "}", "g"), data[i] + "")
+            val = val.replace(new RegExp("\\{" + i + "\\}", "g"), data[i] + "")
         return val
     } catch (error) {
         console.warn("[" + scriptNamespace + "]I18N Key not found: " + key)
