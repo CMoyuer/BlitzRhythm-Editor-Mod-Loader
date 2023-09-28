@@ -3,7 +3,7 @@
 // @name:en     Extra Beatmap Import
 // @name:zh-CN     闪韵灵境谱面导入扩展
 // @namespace   cipher-editor-mod-extra-beatmap-import
-// @version     1.0.1
+// @version     1.1.0
 // @description     Import BeatSaber beatmap into the BlitzRhythm editor
 // @description:en  Import BeatSaber beatmap into the BlitzRhythm editor
 // @description:zh-CN 将BeatSaber谱面导入到闪韵灵境编辑器内
@@ -33,17 +33,23 @@ const I18N = {
                 description: "Timeout for download for beatmap",
             }
         },
-        methods: {
-            // test: {
-            //     name: "Test",
-            //     description: "Just a test button",
-            // },
-        },
+        methods: {},
         code: {
-            // search: {
-            //     fail: "Search song failed!",
-            //     tip_timeout: "It seems that the search has timed out. Do you need to modify the timeout parameter?"
-            // },
+            tip: {
+                info_file_not_found: "Please check whether the zip file contains the info.dat file!",
+                input_bs_url: "Please enter the BeatSaver beatmap URL:",
+                url_format_error: "URL format error!",
+                not_support_map_ver: "Not support this beatmap version! You can try to recreate the beatmap.",
+                not_found_diff: "No available difficulty found for this map!",
+                input_diff: "Enter the difficulty level (index) you want to import:\r\n",
+                input_index_err: "Please enter the correct index!",
+                not_support_bs_ver: "This map version ({0}) is not supported yet, please change the URL and try again!",
+                import_map_err: "An error occurred while importing map! You can refresh and try again..."
+            },
+            button: {
+                import_from_url: "Import from BeatSaver URL",
+                import_from_file: "Import from BeatSaber zip",
+            }
         }
     },
     zh: { // Chinese
@@ -53,17 +59,23 @@ const I18N = {
                 description: "下载谱面的超时时间",
             }
         },
-        methods: {
-            // test: {
-            //     name: "测试",
-            //     description: "只是一个测试按钮",
-            // }
-        },
+        methods: {},
         code: {
-            // search: {
-            //     fail: "搜索歌曲失败！",
-            //     tip_timeout: "看来搜索超时了, 是否需要修改超时时间?"
-            // },
+            tip: {
+                info_file_not_found: "请检查压缩包中是否包含info.dat文件",
+                input_bs_url: "请输入BeatSaver铺面链接",
+                url_format_error: "链接格式错误！",
+                not_support_map_ver: "插件不支持该谱面版本！可尝试重新创建谱面",
+                not_found_diff: "该谱面找不到可用的难度",
+                input_diff: "请问要导入第几个难度（数字）：\r\n",
+                input_index_err: "请输入准确的序号！",
+                not_support_bs_ver: "暂不支持该谱面的版本（{0}），请换个链接再试！",
+                import_map_err: "导入谱面时发生错误！可刷新页面重试..."
+            },
+            button: {
+                import_from_url: "导入谱面 BeatSaver链接",
+                import_from_file: "导入谱面 BeatSaber压缩包",
+            }
         }
     }
 }
@@ -356,7 +368,7 @@ class BeatSaverUtils {
             infoFile = zip.files[fileName]
             break
         }
-        if (!infoFile) throw "请检查压缩包中是否包含info.dat文件"
+        if (!infoFile) throw $t("code.tip.info_file_not_found")
         let rawBeatmapInfo = JSON.parse(await infoFile.async("string"))
         // 难度列表
         let difficultyBeatmaps
@@ -483,14 +495,14 @@ function addImportButton() {
     // 按钮1
     let btnImportBs = btnTemp.clone()[0]
     btnImportBs.id = "importBeatmap"
-    btnImportBs.innerHTML = "导入谱面 BeatSaver链接"
+    btnImportBs.innerHTML = $t("code.button.import_from_url")
     btnImportBs.onclick = importFromBeatSaver
     btnImportBs.style["font-size"] = "13px"
     div.append(btnImportBs)
     // 按钮2
     let btnImportZip = btnTemp.clone()[0]
     btnImportZip.id = "importBeatmap"
-    btnImportZip.innerHTML = "导入谱面 BeatSaber压缩包"
+    btnImportZip.innerHTML = $t("code.button.import_from_file")
     btnImportZip.onclick = importFromBeatmapZip
     btnImportZip.style["margin-left"] = "5px"
     btnImportZip.style["font-size"] = "13px"
@@ -505,11 +517,11 @@ async function importFromBeatSaver() {
         let nowBeatmapInfo = CipherUtils.getNowBeatmapInfo()
 
         // 获取谱面信息
-        let url = prompt('请输入BeatSaver铺面链接', "https://beatsaver.com/maps/" + nowBeatmapInfo.beatsaverId)
+        let url = prompt($t("code.tip.input_bs_url"), "https://beatsaver.com/maps/" + nowBeatmapInfo.beatsaverId)
         if (!url) return
         let result = url.match(/^https:\/\/beatsaver.com\/maps\/(\S*)$/)
         if (!result) {
-            alert("链接格式错误！")
+            alert($t("code.tip.url_format_error"))
             return
         }
         CipherUtils.showLoading()
@@ -518,7 +530,7 @@ async function importFromBeatSaver() {
         await importBeatmap(zipBlob, nowBeatmapInfo)
     } catch (err) {
         console.error(err)
-        alert("出错啦：" + err)
+        alert("Import Failed: " + err)
         CipherUtils.hideLoading()
     }
 }
@@ -544,7 +556,7 @@ function importFromBeatmapZip() {
             importBeatmap(new Blob([file]), nowBeatmapInfo).catch(err => {
                 CipherUtils.hideLoading()
                 console.error(err)
-                alert("出错啦：" + err)
+                alert("Import Failed: " + err)
             })
         })
         // 点击按钮
@@ -552,7 +564,7 @@ function importFromBeatmapZip() {
         fileSelect.click()
         fileSelect.remove()
     } catch (err) {
-        alert("出错啦：" + err)
+        alert("Import Failed: " + err)
     }
 }
 
@@ -584,10 +596,10 @@ async function importBeatmap(zipBlob, nowBeatmapInfo, targetDifficulty) {
         let datKey = nowBeatmapInfo.id + "_" + nowBeatmapInfo.difficulty + "_Ring.dat"
         let datInfo = JSON.parse(await BLITZ_RHYTHM_files.get("keyvaluepairs", datKey))
         if (datInfo._version !== "2.3.0")
-            throw "插件不支持该谱面版本！可尝试重新创建谱面"
+            throw $t("code.tip.not_support_map_ver")
         let beatmapInfo = await BeatSaverUtils.getBeatmapInfo(zipBlob)
         if (beatmapInfo.difficulties.length == 0)
-            throw "该谱面找不到可用的难度"
+            throw $t("code.tip.not_found_diff")
 
         // 选择导入难度
         let tarDifficulty = 1
@@ -603,7 +615,7 @@ async function importBeatmap(zipBlob, nowBeatmapInfo, targetDifficulty) {
             }
             let difficulty = ""
             while (true) {
-                difficulty = prompt("请问要导入第几个难度（数字）：\r\n" + promptTip, defaultDifficulty)
+                difficulty = prompt($t("code.tip.input_diff") + promptTip, defaultDifficulty)
                 if (!difficulty) {
                     // Cancel
                     CipherUtils.hideLoading()
@@ -612,10 +624,8 @@ async function importBeatmap(zipBlob, nowBeatmapInfo, targetDifficulty) {
                 if (/^\d$/.test(difficulty)) {
                     tarDifficulty = parseInt(difficulty)
                     if (tarDifficulty > 0 && tarDifficulty <= beatmapInfo.difficulties.length) break
-                    alert("请输入准确的序号！")
-                } else {
-                    alert("请输入准确的序号！")
                 }
+                alert($t("code.tip.input_index_err"))
             }
         }
         // 开始导入
@@ -693,7 +703,7 @@ function convertBeatMapInfo(version, rawInfo, songDuration) {
             })
         }
     } else {
-        throw ("暂不支持该谱面的版本（" + version + "），请换个链接再试！")
+        throw $t("code.tip.not_support_bs_ver", version)
     }
     // 因Cipher不支持长墙，所以转为多面墙
     let newObstacles = []
@@ -926,6 +936,6 @@ function tick() {
     // Import beatmap via url parameter
     ApplyPageParmater().catch(res => {
         console.error(res)
-        alert("导入谱面时发生错误！可刷新页面重试...")
+        alert($t("code.tip.import_map_err"))
     })
 })()

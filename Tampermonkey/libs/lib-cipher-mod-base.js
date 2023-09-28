@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BlitzRhythm Editor Mod Base Lib
 // @namespace   lib-cipher-mod-base
-// @version     1.1.0
+// @version     1.2.0
 // @description A BlitzRhythm Editor Mod Base Lib
 // @author      Moyuer
 // @author:zh   如梦Nya
@@ -22,16 +22,20 @@ function log(...data) {
 /**
  * i18n
  * @param {string} key 
+ * @param {any[]} data 
  */
-function $t(key) {
+function $t(key, ...data) {
     let language = localStorage.getItem("i18nextLng") ?? "en"
     if (/^zh-?/.test(language) && I18N["zh"]) language = "zh"
     let keys = key.split('.')
     try {
+        /** @type {string} */
         let val = I18N[language] ?? I18N['en']
         keys.forEach(element => {
             val = val[element]
         })
+        for (let i = 0; i < data.length; i++)
+            val = val.replace("{" + i + "}", data[i] + "")
         return val
     } catch (error) {
         console.warn("[" + scriptNamespace + "]I18N Key not found: " + key)
