@@ -1,10 +1,12 @@
 // ==UserScript==
 // @name        BlitzRhythm Editor Mod Base Lib
+// @name:zh-CN  闪韵灵境编辑器模组基本库
 // @namespace   lib-cipher-mod-base
 // @version     1.2.0
 // @description A BlitzRhythm Editor Mod Base Lib
+// @description:zh-CN 兼容模组加载器所必须的库
 // @author      Moyuer
-// @author:zh   如梦Nya
+// @author:zh-CN   如梦Nya
 // @license     MIT
 // @source      https://github.com/CMoyuer/BlitzRhythm-Editor-Mod-Loader
 // @match       *://*/*
